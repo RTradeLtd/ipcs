@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 
+	xpb "github.com/RTradeLtd/TxPB/v3/go"
+	sdkc "github.com/RTradeLtd/go-temporalx-sdk/client"
 	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd"
 	"github.com/containerd/containerd/errdefs"
 	"github.com/containerd/containerd/images"
 	"github.com/containerd/containerd/platforms"
 	"github.com/containerd/containerd/remotes"
-	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/pkg/errors"
@@ -18,18 +19,18 @@ import (
 
 // Client is a client for containerd using ipcs.
 type Client struct {
-	ipfsCln iface.CoreAPI
+	ipfsCln *sdkc.Client
 	ctrdCln *containerd.Client
 	ipcs    *store
 }
 
 // NewClient returns a new ipcs client.
-func NewClient(ipfsCln iface.CoreAPI, ctrdCln *containerd.Client) *Client {
+func NewClient(sclient *sdkc.Client, ctrdCln *containerd.Client) *Client {
 	return &Client{
-		ipfsCln: ipfsCln,
+		ipfsCln: sclient,
 		ctrdCln: ctrdCln,
 		ipcs: &store{
-			cln: ipfsCln,
+			cln: sclient,
 		},
 	}
 }
@@ -121,7 +122,7 @@ func (c *Client) Push(ctx context.Context, ref string, desc ocispec.Descriptor) 
 
 // PinHandler returns a handler that will recursive pin all content discovered
 // in a call to Dispatch. Use with ChildrenHandler to do a full recursive pin.
-func PinHandler(ipfsCln iface.CoreAPI) images.HandlerFunc {
+func PinHandler(ipfsCln *sdkc.Client) images.HandlerFunc {
 	return func(ctx context.Context, desc ocispec.Descriptor) (subdescs []ocispec.Descriptor, err error) {
 		switch desc.MediaType {
 		case images.MediaTypeDockerSchema1Manifest:
@@ -133,16 +134,15 @@ func PinHandler(ipfsCln iface.CoreAPI) images.HandlerFunc {
 	}
 }
 
-func pin(ctx context.Context, ipfsCln iface.CoreAPI, desc ocispec.Descriptor) error {
+func pin(ctx context.Context, ipfsCln *sdkc.Client, desc ocispec.Descriptor) error {
 	c, err := digestconv.DigestToCid(desc.Digest)
 	if err != nil {
 		return errors.Wrapf(err, "failed to convert digest %q to cid", desc.Digest)
 	}
-
-	err = ipfsCln.Pin().Add(ctx, path.IpfsPath(c))
-	if err != nil {
+	if _, err := ipfsCln.NodeAPIClient.Persist(ctx, &xpb.PersistRequest{
+		Cids: []string{path.IpfsPath(c).String()},
+	}); err != nil {
 		return errors.Wrapf(err, "failed to pin %q", c)
 	}
-
 	return nil
 }

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
+	xpb "github.com/RTradeLtd/TxPB/v3/go"
 	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/errdefs"
-	"github.com/ipfs/interface-go-ipfs-core/options"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	digest "github.com/opencontainers/go-digest"
 	"github.com/pkg/errors"
@@ -22,20 +22,16 @@ func (s *store) Info(ctx context.Context, dgst digest.Digest) (content.Info, err
 		return content.Info{}, errors.Wrapf(err, "failed to convert digest %q to cid", dgst)
 	}
 
-	n, err := s.cln.Unixfs().Get(ctx, path.IpfsPath(c))
+	data, err := s.cln.DownloadFile(ctx, &xpb.DownloadRequest{
+		Hash: path.IpfsPath(c).String(),
+	}, false)
 	if err != nil {
 		return content.Info{}, errors.Wrapf(err, "failed to get unixfs node %q", c)
 	}
-
-	size, err := n.Size()
-	if err != nil {
-		return content.Info{}, errors.Wrapf(err, "failed to get size of %q", c)
-	}
-
 	now := time.Now()
 	return content.Info{
 		Digest:    dgst,
-		Size:      size,
+		Size:      int64(data.Len()),
 		CreatedAt: now,
 		UpdatedAt: now,
 	}, nil
@@ -54,11 +50,11 @@ func (s *store) Update(ctx context.Context, info content.Info, fieldpaths ...str
 // match the provided filters. If no filters are given all
 // items will be walked.
 func (s *store) Walk(ctx context.Context, fn content.WalkFunc, filters ...string) error {
+	/* TODO(bonedaddy): figure out a way to replicate this with temporalx
 	// TODO: Filters are also not supported in containerd's local store.
 	// Since we replace the local store, and filters are implemented in the boltdb
 	// metadata that wraps the local store, we can wait until upstream supports
 	// it too.
-
 	pins, err := s.cln.Pin().Ls(ctx, options.Pin.Type.All())
 	if err != nil {
 		return errors.Wrap(err, "failed to list ipfs pins")
@@ -83,21 +79,23 @@ func (s *store) Walk(ctx context.Context, fn content.WalkFunc, filters ...string
 	}
 
 	return nil
+	*/
+	return errors.New("not yet implemented")
 }
 
 // Delete removes the content from the store.
 func (s *store) Delete(ctx context.Context, dgst digest.Digest) error {
-	c, err := digestconv.DigestToCid(dgst)
-	if err != nil {
-		return errors.Wrap(err, "failed to convert digest")
-	}
+	/*	c, err := digestconv.DigestToCid(dgst)
+		if err != nil {
+			return errors.Wrap(err, "failed to convert digest")
+		}
 
-	// Recursively removing a pin will not remove shared chunks because IPFS has
-	// its internal refcounting. This will expose the unpinned blobs to IPFS GC.
-	err = s.cln.Pin().Rm(ctx, path.IpfsPath(c), options.Pin.RmRecursive(true))
-	if err != nil {
-		return errors.Wrap(err, "failed to remove pin")
-	}
-
-	return nil
+		// Recursively removing a pin will not remove shared chunks because IPFS has
+		// its internal refcounting. This will expose the unpinned blobs to IPFS GC.
+		err = s.cln.Pin().Rm(ctx, path.IpfsPath(c), options.Pin.RmRecursive(true))
+		if err != nil {
+			return errors.Wrap(err, "failed to remove pin")
+		}
+	*/
+	return errors.New("not yet implemented")
 }

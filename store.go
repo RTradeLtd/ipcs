@@ -1,31 +1,25 @@
 package ipcs
 
 import (
+	sdkc "github.com/RTradeLtd/go-temporalx-sdk/client"
+
 	"github.com/containerd/containerd/content"
-	httpapi "github.com/ipfs/go-ipfs-http-client"
-	iface "github.com/ipfs/interface-go-ipfs-core"
-	"github.com/pkg/errors"
 )
 
 type Config struct {
-	IpfsPath string
+	ipfsCln *sdkc.Client
 }
 
 type store struct {
-	cln iface.CoreAPI
+	cln *sdkc.Client
 }
 
 func NewContentStore(cfg Config) (content.Store, error) {
-	cln, err := httpapi.NewPathApi(cfg.IpfsPath)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to create ipfs client")
-	}
-
 	return &store{
-		cln: cln,
+		cln: cfg.ipfsCln,
 	}, nil
 }
 
-func NewContentStoreFromCoreAPI(cln iface.CoreAPI) content.Store {
+func NewContentStoreFromCoreAPI(cln *sdkc.Client) content.Store {
 	return &store{cln}
 }

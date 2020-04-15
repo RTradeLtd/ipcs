@@ -5,13 +5,12 @@ import (
 	"io"
 	"time"
 
+	sdkc "github.com/RTradeLtd/go-temporalx-sdk/client"
 	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/errdefs"
+	"github.com/ipfs/go-cid"
 	files "github.com/ipfs/go-ipfs-files"
-	iface "github.com/ipfs/interface-go-ipfs-core"
-	"github.com/ipfs/interface-go-ipfs-core/options"
-	"github.com/ipfs/interface-go-ipfs-core/path"
 	digest "github.com/opencontainers/go-digest"
 	"github.com/pkg/errors"
 )
@@ -29,11 +28,12 @@ func (s *store) Writer(ctx context.Context, opts ...content.WriterOpt) (content.
 		if err != nil {
 			return nil, errors.Wrapf(err, "failed to convert digest '%s' to cid", wOpts.Desc.Digest)
 		}
-
+		/* TODO(bonedaddy): implement
 		_, err = s.cln.Unixfs().Get(ctx, path.IpfsPath(c))
 		if err == nil {
 			return nil, errors.Wrapf(errdefs.ErrAlreadyExists, "content %v", wOpts.Desc.Digest)
 		}
+		*/
 	}
 
 	w := &writer{
@@ -53,7 +53,7 @@ func (s *store) Writer(ctx context.Context, opts ...content.WriterOpt) (content.
 
 type writer struct {
 	ctx       context.Context
-	cln       iface.CoreAPI
+	cln       *sdkc.Client
 	ref       string
 	offset    int64
 	total     int64
@@ -140,13 +140,17 @@ func (w *writer) Truncate(size int64) error {
 
 	ctx, cancel := context.WithCancel(w.ctx)
 	go func() {
-		p, err := w.cln.Unixfs().Add(ctx, files.NewReaderFile(r), options.Unixfs.Pin(true))
+		p, err := w.cln.UploadFile(ctx, files.NewReaderFile(r), size, nil, false)
 		if err != nil {
 			w.ipfsErr = err
 			return
 		}
-
-		dgst, err := digestconv.CidToDigest(p.Cid())
+		cd, err := cid.Decode(p.GetHash())
+		if err != nil {
+			w.ipfsErr = err
+			return
+		}
+		dgst, err := digestconv.CidToDigest(cd)
 		if err != nil {
 			w.ipfsErr = err
 			return
