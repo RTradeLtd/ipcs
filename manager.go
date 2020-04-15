@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/errdefs"
-	"github.com/hinshun/ipcs/digestconv"
 	"github.com/ipfs/interface-go-ipfs-core/options"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	digest "github.com/opencontainers/go-digest"

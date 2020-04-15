@@ -5,9 +5,9 @@ import (
 	"io"
 	"time"
 
+	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/errdefs"
-	"github.com/hinshun/ipcs/digestconv"
 	files "github.com/ipfs/go-ipfs-files"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/options"

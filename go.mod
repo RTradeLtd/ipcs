@@ -1,4 +1,4 @@
-module github.com/hinshun/ipcs
+module github.com/RTradeLtd/ipcs
 
 go 1.12
 

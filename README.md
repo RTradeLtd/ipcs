@@ -1,8 +1,8 @@
 ## ipcs
 
-[![GoDoc](https://godoc.org/github.com/hinshun/ipcs?status.svg)](https://godoc.org/github.com/hinshun/ipcs)
+[![GoDoc](https://godoc.org/github.com/RTradeLtd/ipcs?status.svg)](https://godoc.org/github.com/RTradeLtd/ipcs)
 [![Build Status](https://travis-ci.org/hinshun/ipcs.svg?branch=master)](https://travis-ci.org/hinshun/ipcs)
-[![Go Report Card](https://goreportcard.com/badge/github.com/hinshun/ipcs)](https://goreportcard.com/report/github.com/hinshun/ipcs)
+[![Go Report Card](https://goreportcard.com/badge/github.com/RTradeLtd/ipcs)](https://goreportcard.com/report/github.com/RTradeLtd/ipcs)
 
 Containerd meets [IPFS](github.com/ipfs/go-ipfs). Peer-to-peer distribution of content blobs.
 

@@ -5,8 +5,8 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd/content"
-	"github.com/hinshun/ipcs/digestconv"
 	files "github.com/ipfs/go-ipfs-files"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"

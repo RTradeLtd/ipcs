@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/RTradeLtd/ipcs"
 	"github.com/containerd/containerd"
 	"github.com/containerd/containerd/namespaces"
 	"github.com/containerd/containerd/oci"
 	"github.com/containerd/containerd/remotes/docker"
-	"github.com/hinshun/ipcs"
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/moby/buildkit/util/contentutil"

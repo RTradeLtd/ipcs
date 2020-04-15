@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
+	"github.com/RTradeLtd/ipcs"
 	"github.com/containerd/containerd/plugin"
-	"github.com/hinshun/ipcs"
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	"github.com/pkg/errors"
 )

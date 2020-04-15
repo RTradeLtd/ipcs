@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/hinshun/ipcs/digestconv"
+	"github.com/RTradeLtd/ipcs/digestconv"
 	files "github.com/ipfs/go-ipfs-files"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"

@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/RTradeLtd/ipcs/digestconv"
 	"github.com/containerd/containerd"
 	"github.com/containerd/containerd/errdefs"
 	"github.com/containerd/containerd/images"
 	"github.com/containerd/containerd/platforms"
 	"github.com/containerd/containerd/remotes"
-	"github.com/hinshun/ipcs/digestconv"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/interface-go-ipfs-core/path"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"

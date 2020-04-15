@@ -1,15 +1,15 @@
-root = "/home/edgarl/go/src/github.com/hinshun/ipcs/tmp/containerd/root"
-state = "/home/edgarl/go/src/github.com/hinshun/ipcs/tmp/containerd/state"
+root = "/home/solidity/go/src/github.com/RTradeLtd/ipcs/tmp/containerd/root"
+state = "/home/solidity/go/src/github.com/RTradeLtd/ipcs/tmp/containerd/state"
 oom_score = 0
 disabled_plugins = ["content"]
 
 [grpc]
-  address = "/home/edgarl/go/src/github.com/hinshun/ipcs/tmp/containerd/containerd.sock"
+  address = "/home/solidity/go/src/github.com/RTradeLtd/ipcs/tmp/containerd/containerd.sock"
   uid = 0
   gid = 0
 
 [debug]
-  address = "/home/edgarl/go/src/github.com/hinshun/ipcs/tmp/containerd/debug.sock"
+  address = "/home/solidity/go/src/github.com/RTradeLtd/ipcs/tmp/containerd/debug.sock"
   uid = 0
   gid = 0
   level = "info"
@@ -29,7 +29,7 @@ disabled_plugins = ["content"]
   [plugins.linux]
     shim = "containerd-shim"
     runtime = "runc"
-    runtime_root = "/home/edgarl/go/src/github.com/hinshun/ipcs/tmp/containerd/runc"
+    runtime_root = "/home/solidity/go/src/github.com/RTradeLtd/ipcs/tmp/containerd/runc"
     no_shim = false
     shim_debug = false
   [plugins.scheduler]
